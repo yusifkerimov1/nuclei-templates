@@ -1,0 +1,21 @@
+id: idor-profile-access
+
+info:
+  name: IDOR on Profile Access
+  author: your-name
+  severity: high
+  tags: idor, access-control
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/profile/1"
+    matchers:
+      - type: word
+        words:
+          - "Email:"
+        part: body
+      - type: status
+        status:
+          - 200
+    matchers-condition: and

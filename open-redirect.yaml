@@ -1,0 +1,27 @@
+id: open-redirect-basic
+
+info:
+  name: Open Redirect Detection
+  author: your-name
+  severity: medium
+  description: >
+    Detects open redirect vulnerabilities where the `redirect`, `url`, or similar parameters
+    can be manipulated to redirect users to an external site.
+  tags: open-redirect, redirect, url
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/redirect?url=https://evil.com"
+      - "{{BaseURL}}/redirect?next=https://evil.com"
+      - "{{BaseURL}}/redir?to=https://evil.com"
+    matchers:
+      - type: status
+        status:
+          - 302
+          - 301
+      - type: regex
+        part: header
+        regex:
+          - "Location: https://evil.com"
+    matchers-condition: and
